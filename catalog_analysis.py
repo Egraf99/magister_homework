@@ -1,5 +1,5 @@
 import math
-from typing import Any
+from typing import Any, Generator
 
 
 movies = [
@@ -243,7 +243,21 @@ def genres_only_in_one(movies_a: list[dict], movies_b: list[dict]) -> set[str]:
     return genres_a - genres_b
 
 
+def iter_high_rated(movies: list[dict], min_rating: float = 8.0) -> Generator:
+    """Генератор, возвращающий фильмы с рейтингом не меньше, чем `min_rating`."""
+    for movie in movies:
+        if movie["rating"] >= min_rating:
+            yield movie
+        else:
+            continue
 
-print(all_genres(movies))
-print(common_actors(movies[0], movies[4]))
-print(genres_only_in_one(movies[0:2], movies[2:3]))
+
+def print_rating_movies(movie: list[dict]) -> None:
+    """Демонстрация работы функции `iter_high_rated`."""
+    for movie in iter_high_rated(movies):
+        print(format_report_line(movie))
+
+    print(sum(m["duration_min"] for m in iter_high_rated(movies, 7)))
+
+
+print_rating_movies(movies)
