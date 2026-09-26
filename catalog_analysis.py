@@ -1,28 +1,88 @@
 import math
+from copy import deepcopy
 from typing import Any, Generator
 
-
 movies = [
-    {"title": "The Dune Chronicles", "year": 2021, "genres": {"sci-fi", "drama"},
-     "rating": 8.6, "duration_min": 155, "actors": ["T. Chalamet", "R. Ferguson", "O. Isaac"]},
-    {"title": "Kitchen Stories", "year": 2019, "genres": {"comedy", "drama"},
-     "rating": 7.1, "duration_min": 98, "actors": ["A. Novak", "M. Ferguson"]},
-    {"title": "silent hours", "year": 2016, "genres": {"thriller", "drama"},
-     "rating": 6.4, "duration_min": 112, "actors": ["J. Bloom", "K. Lee"]},
-    {"title": "Comet Racers", "year": 2023, "genres": {"sci-fi", "action"},
-     "rating": 5.9, "duration_min": 101, "actors": ["O. Isaac", "P. Diaz"]},
-    {"title": "The Last Bakery", "year": 2014, "genres": {"comedy"},
-     "rating": 7.8, "duration_min": 89, "actors": ["A. Novak", "T. Chalamet"]},
-    {"title": "midnight in oslo", "year": 2020, "genres": {"thriller", "mystery"},
-     "rating": 8.9, "duration_min": 124, "actors": ["K. Lee", "R. Ferguson"]},
-    {"title": "Garden of Static", "year": 2022, "genres": {"drama"},
-     "rating": 4.8, "duration_min": 137, "actors": ["P. Diaz", "J. Bloom"]},
-    {"title": "The Quiet Algorithm", "year": 2024, "genres": {"sci-fi", "drama"},
-     "rating": 9.2, "duration_min": 118, "actors": ["M. Ferguson", "O. Isaac"]},
-    {"title": "Two Left Shoes", "year": 2011, "genres": {"comedy"},
-     "rating": 6.0, "duration_min": 95, "actors": ["A. Novak", "K. Lee"]},
-    {"title": "Red Harbor", "year": 2018, "genres": {"action", "thriller"},
-     "rating": 7.3, "duration_min": 129, "actors": ["P. Diaz", "T. Chalamet"]},
+    {
+        "title": "The Dune Chronicles",
+        "year": 2021,
+        "genres": {"sci-fi", "drama"},
+        "rating": 8.6,
+        "duration_min": 155,
+        "actors": ["T. Chalamet", "R. Ferguson", "O. Isaac"]
+    },
+    {
+        "title": "Kitchen Stories",
+        "year": 2019,
+        "genres": {"comedy", "drama"},
+        "rating": 7.1,
+        "duration_min": 98,
+        "actors": ["A. Novak", "M. Ferguson"]
+    },
+    {
+        "title": "silent hours",
+        "year": 2016,
+        "genres": {"thriller", "drama"},
+        "rating": 6.4,
+        "duration_min": 112,
+        "actors": ["J. Bloom", "K. Lee"]
+    },
+    {
+        "title": "Comet Racers",
+        "year": 2023,
+        "genres": {"sci-fi", "action"},
+        "rating": 5.9,
+        "duration_min": 101,
+        "actors": ["O. Isaac", "P. Diaz"]
+    },
+    {
+        "title": "The Last Bakery",
+        "year": 2014,
+        "genres": {"comedy"},
+        "rating": 7.8,
+        "duration_min": 89,
+        "actors": ["A. Novak", "T. Chalamet"]
+    },
+    {
+        "title": "midnight in oslo",
+        "year": 2020,
+        "genres": {"thriller", "mystery"},
+        "rating": 8.9,
+        "duration_min": 124,
+        "actors": ["K. Lee", "R. Ferguson"]
+    },
+    {
+        "title": "Garden of Static",
+        "year": 2022,
+        "genres": {"drama"},
+        "rating": 4.8,
+        "duration_min": 137,
+        "actors": ["P. Diaz", "J. Bloom"]
+    },
+    {
+        "title": "The Quiet Algorithm",
+        "year": 2024,
+        "genres": {"sci-fi", "drama"},
+        "rating": 9.2,
+        "duration_min": 118,
+        "actors": ["M. Ferguson", "O. Isaac"]
+    },
+    {
+        "title": "Two Left Shoes",
+        "year": 2011,
+        "genres": {"comedy"},
+        "rating": 6.0,
+        "duration_min": 95,
+        "actors": ["A. Novak", "K. Lee"]
+    },
+    {
+        "title": "Red Harbor",
+        "year": 2018,
+        "genres": {"action", "thriller"},
+        "rating": 7.3,
+        "duration_min": 129,
+        "actors": ["P. Diaz", "T. Chalamet"]
+    },
 ]
 
 
@@ -31,8 +91,10 @@ def average_rating(movies: list[dict[str, Any]]) -> float:
     Функция возвращает среднюю оценку по каталогу фильмов.
 
     Args:
-        movies (list[dict]): Список фильмов, каждый фильм представляет собой словарь аттрибутов 
-            словарь должен содержать ключ "rating" - по нему считается средняя оценка
+        movies (list[dict]): Список фильмов,
+            каждый фильм представляет собой словарь аттрибутов
+            словарь должен содержать ключ "rating"
+                - по нему считается средняя оценка
 
     Returns:
         float: Средняя оценка, округленная до одного знака после запятой
@@ -50,16 +112,24 @@ def average_rating(movies: list[dict[str, Any]]) -> float:
     return round(average, 1)
 
 
-def catalog_age_stats(movies: list[dict[str, Any]], current_year:int=2026) -> tuple[int, int, int]:
+def catalog_age_stats(
+    movies: list[dict[str, Any]],
+    current_year: int = 2026
+) -> tuple[int, int, int]:
     """
-    Функция возвращает кортеж: (самый старый фильм в годах, самый новый фильм в годах, среднее)
+    Функция возвращает кортеж:
+        (самый старый фильм в годах, самый новый фильм в годах, среднее)
 
     Args:
-        movies (list[dict]): Список фильмов, каждый фильм представляет собой словарь аттрибутов 
+        movies (list[dict]): Список фильмов,
+            каждый фильм представляет собой словарь аттрибутов
             словарь должен содержать ключ "year" - по нему считается возраст фильма
 
     Returns:
-        tuple[int, int, int]: кортеж: (самый старый фильм в годах, самый новый фильм в годах, среднее), где среднее округлено вверх до целого."""
+        tuple[int, int, int]: кортеж:
+            (самый старый фильм в годах, самый новый фильм в годах, среднее),
+            где среднее округлено вверх до целого.
+    """
     years = []
     years_sum = 0
     for movie in movies:
@@ -100,7 +170,12 @@ def rating_tier(rating: float) -> str:
 
 
 def decade_label(year: int) -> str:
-    """Функция возвращает метку по возрасту фильма: "новые" (после 2020), "недавние" (2015–2020) или "старые" (раньше 2015)."""
+    """
+    Функция возвращает метку по возрасту фильма:
+        "новые" (после 2020)
+        "недавние" (2015–2020)
+        "старые" (раньше 2015)
+    """
     match year:
         case (year) if year < 2015:
             return "старые"
@@ -113,7 +188,9 @@ def decade_label(year: int) -> str:
 
 
 def print_not_comedy_films(movies: list[dict[str, Any]]) -> None:
-    """Функция выводит в консоль названия всех фильмов, не относящихся к жанру 'comedy'."""
+    """
+    Функция выводит в консоль названия всех фильмов, не относящихся к жанру 'comedy'.
+    """
     for movie in movies:
         if "comedy" in movie.get("genres", []):
             continue
@@ -122,7 +199,10 @@ def print_not_comedy_films(movies: list[dict[str, Any]]) -> None:
 
 
 def print_first_exelent_movie(movies: list[dict[str, Any]]) -> None:
-    """Функция выводит в консоль первого фильма с рейтингом 9.0 или сообщение "Шедевров не найдено"."""
+    """
+    Функция выводит в консоль первого фильма
+    с рейтингом 9.0 или сообщение "Шедевров не найдено".
+    """
     i = 0
     while i < len(movies):
         if movies[i].get("rating", 0) > 9:
@@ -133,8 +213,13 @@ def print_first_exelent_movie(movies: list[dict[str, Any]]) -> None:
         print("Шедевров не найдено")
 
 
-def count_long_movies(movies: list[dict[str, Any]], treshold: int = 120) -> int:
-    """Функция считает количество фильмов с продолжительностью больше, чем `treshold`."""
+def count_long_movies(
+    movies: list[dict[str, Any]],
+    treshold: int = 120
+) -> int:
+    """
+    Функция считает количество фильмов с продолжительностью больше, чем `treshold`.
+    """
     long_movies_cnt = 0
     for movie in movies:
         if movie.get("duration_min", 0) > treshold:
@@ -153,7 +238,9 @@ def normalize_title(title: str) -> str:
 
 
 def make_slug(title: str) -> str:
-    """Функция преобразует нормализованное название в слаг вида the-quiet-algorithm."""
+    """
+    Функция преобразует нормализованное название в слаг вида the-quiet-algorithm.
+    """
     return title.lower().replace(" ", "-")
 
 
@@ -169,21 +256,46 @@ def format_report_line(movie) -> str:
 
 
 def titles_sorted_by_rating(movies: list[dict[str, Any]]) -> list[str]:
-    """Функция возвращает список названий фильмов, отсортированных по убыванию рейтинга."""
-    movies_copy = [{"title": m["title"], "rating": m["rating"]} for m in movies]
+    """
+    Функция возвращает список названий фильмов, отсортированных по убыванию рейтинга.
+    """
+    movies_copy = [
+        {"title": m["title"], "rating": m["rating"]}
+        for m in movies
+    ]
     movies_copy.sort(key=lambda m: m["rating"], reverse=True)
     result = [movie.get("title", "") for movie in movies_copy]
 
     return result
 
 
-def top_n_by_rating(movies: list[dict[str, Any]], n : int = 3) -> list[tuple[str, float]]:
+def top_n_by_rating(
+    movies: list[dict[str, Any]],
+    n: int = 3
+) -> list[tuple[str, float]]:
     """Функция возвращает список кортежей (title, rating) - топ по рейтингу."""
-    movies_copy = [{"title": m["title"], "rating": m["rating"]} for m in movies]
+    movies_copy = [
+        {"title": m["title"], "rating": m["rating"]}
+        for m in movies
+    ]
     movies_copy.sort(key=lambda m: m["rating"], reverse=True)
-    result = [(movie.get("title", ""), movie.get("rating", 0.0)) for movie in movies_copy]
+    result = [
+        (movie.get("title", ""), movie.get("rating", 0.0))
+        for movie in movies_copy
+    ]
 
-    return result[0:n+1]
+    return result[0:n]
+
+
+def top_n_movies_by_rating(
+    movies: list[dict[str, Any]],
+    n: int = 3
+) -> list[dict]:
+    """Функция возвращает список фильмов - топ по рейтингу."""
+    movies_copy = deepcopy(movies)
+    movies_copy.sort(key=lambda m: m["rating"], reverse=True)
+
+    return movies_copy[0:n]
 
 
 def count_by_genre(movies: list[dict[str, Any]]) -> dict[str, int]:
@@ -211,7 +323,9 @@ def actor_filmography(movies: list[dict[str, Any]]) -> dict[str, int]:
 
 
 def get_rating_movies(movies: list[dict[str, Any]]) -> dict[str, str]:
-    """Функция строит словарь {title: rating} для фильмов с рейтингом выше среднего."""
+    """
+    Функция строит словарь {title: rating} для фильмов с рейтингом выше среднего.
+    """
     average_rate = average_rating(movies)
     return {m["title"]: m["rating"] for m in movies if m["rating"] > average_rate}
 
@@ -260,4 +374,29 @@ def print_rating_movies(movie: list[dict]) -> None:
     print(sum(m["duration_min"] for m in iter_high_rated(movies, 7)))
 
 
-print_rating_movies(movies)
+def build_report(movies: list[dict]) -> None:
+    """Выводит в консоль статистику по фильмам."""
+    tab = "  "
+    print("ОТЧЕТ ПО КАТАЛОГУ")
+    print(f"Средний рейтинг: {average_rating(movies)}")
+    print(f"Средний возраст фильмов: {catalog_age_stats(movies)[2]} лет")
+    print()
+    print("Топ-3 фильма:")
+    for movie in top_n_movies_by_rating(movies, n=3):
+        print(tab + format_report_line(movie))
+    print()
+    print("Фильмов по жанрам")
+    genre_cnt_dict = count_by_genre(movies)
+    for genre, count in sorted(
+        genre_cnt_dict.items(),
+        key=lambda item: item[1],
+        reverse=True,
+    ):
+        print(f"{tab}{genre} - {count}")
+    print()
+    print("Все жанры каталога: ", end="")
+    print(", ".join(all_genres(movies)))
+
+
+if __name__ == "__main__":
+    build_report(movies)
