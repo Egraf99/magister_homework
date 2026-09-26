@@ -1,5 +1,5 @@
 import math
-from typing import Any
+from typing import Any, Optional
 
 
 movies = [
@@ -85,6 +85,34 @@ def duration_in_hours(minutes: int) -> str:
     return f"{hours}ч {minutes_rest}м"
 
 
-print(average_rating(movies))
-print(catalog_age_stats(movies))
-print(duration_in_hours(movies[0]["duration_min"]))
+def rating_tier(rating: float) -> str:
+    """Функция по оценке возвращает категорию."""
+    category = None
+    if rating < 5:
+        category = "слабо"
+    elif rating < 7:
+        category = "средне"
+    elif rating < 9:
+        category = "хорошо"
+    elif rating >= 9:
+        category = "шедевр"
+    return category if category is not None else "не возможно определить"
+
+
+def decade_label(year: int) -> str:
+    """Функция возвращает метку по возрасту фильма: "новые" (после 2020), "недавние" (2015–2020) или "старые" (раньше 2015)."""
+    match year:
+        case (year) if year < 2015:
+            return "старые"
+        case (year) if year >= 2015 and year <= 2020:
+            return "недавние"
+        case (year) if year > 2020:
+            return "новые"
+        case _:
+            return ""
+
+for rate in [2.0, 5.3, 8.7, 9.9]:
+    print(rating_tier(rate))
+
+for year in [2009, 2016, 2023]:
+    print(decade_label(year))
