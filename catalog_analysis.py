@@ -139,4 +139,37 @@ def count_long_movies(movies: list[dict[str, Any]], treshold: int = 120) -> int:
     for movie in movies:
         if movie.get("duration_min", 0) > treshold:
             long_movies_cnt += 1
+
     return long_movies_cnt
+
+
+def normalize_title(title: str) -> str:
+    """Функция нормализует название фильма к формату Title Case."""
+    normalize_words = []
+    for word in title.split(" "):
+        normalize_words.append(word[0].upper() + word[1:].lower())
+
+    return " ".join(normalize_words)
+
+
+def make_slug(title: str) -> str:
+    """Функция преобразует нормализованное название в слаг вида the-quiet-algorithm."""
+    return title.lower().replace(" ", "-")
+
+
+def format_report_line(movie) -> str:
+    """Функция возвращает строку с полным описанием фильма."""
+    title = normalize_title(movie.get("title", ""))
+    year = movie.get("year", 1111)
+    rate = movie.get("rating", 0.0)
+    time = duration_in_hours(movie.get("duration_min", 0))
+    genres = ", ".join(sorted(movie.get("genres", [])))
+
+    return f'"{title}" ({year}) - {rate}/10, {time}, жанры: {genres}'
+
+
+for m in movies:
+    print(normalize_title(m['title']))
+    print(make_slug(normalize_title(m['title'])))
+    print(format_report_line(m))
+    print("------------")
