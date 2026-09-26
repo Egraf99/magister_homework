@@ -216,8 +216,34 @@ def get_rating_movies(movies: list[dict[str, Any]]) -> dict[str, str]:
     return {m["title"]: m["rating"] for m in movies if m["rating"] > average_rate}
 
 
-print(count_by_genre(movies))
-print("--------")
-print(actor_filmography(movies))
-print("--------")
-print(get_rating_movies(movies))
+def all_genres(movies: list[dict[str, Any]]) -> set[str]:
+    """Функция возвращает множество всех уникальных жанров каталога."""
+    result = set()
+    for movie in movies:
+        result = result | set(movie["genres"])
+
+    return result
+
+
+def common_actors(movie1: dict, movie2: dict) -> set[str]:
+    """Функция возвращает актеров, которые снимались в обоих фильмах."""
+    return set(movie1["actors"]) & set(movie2["actors"])
+
+
+def genres_only_in_one(movies_a: list[dict], movies_b: list[dict]) -> set[str]:
+    """Функция возвращает жанры, которые есть в `movies_a`, но нет в `movies_b`."""
+    genres_a = set()
+    for movie in movies_a:
+        genres_a = genres_a | set(movie["genres"])
+
+    genres_b = set()
+    for movie in movies_b:
+        genres_b = genres_b | set(movie["genres"])
+
+    return genres_a - genres_b
+
+
+
+print(all_genres(movies))
+print(common_actors(movies[0], movies[4]))
+print(genres_only_in_one(movies[0:2], movies[2:3]))
