@@ -177,10 +177,47 @@ def titles_sorted_by_rating(movies: list[dict[str, Any]]) -> list[str]:
     return result
 
 
-def top_n_by_rating(movies, n=3) -> list[tuple[str, float]]:
+def top_n_by_rating(movies: list[dict[str, Any]], n : int = 3) -> list[tuple[str, float]]:
     """Функция возвращает список кортежей (title, rating) - топ по рейтингу."""
     movies_copy = [{"title": m["title"], "rating": m["rating"]} for m in movies]
     movies_copy.sort(key=lambda m: m["rating"], reverse=True)
     result = [(movie.get("title", ""), movie.get("rating", 0.0)) for movie in movies_copy]
 
     return result[0:n+1]
+
+
+def count_by_genre(movies: list[dict[str, Any]]) -> dict[str, int]:
+    """Функция возвращает словарь {жанр: количество фильмов}."""
+    result = {}
+    for movie in movies:
+        genres = movie["genres"]
+        for genre in genres:
+            result[genre] = result.get(genre, 0) + 1
+
+    return result
+
+
+def actor_filmography(movies: list[dict[str, Any]]) -> dict[str, int]:
+    """Функция возвращает словарь {актер: [список названий фильмов]}."""
+    result = {}
+    for movie in movies:
+        actors = movie["actors"]
+        for actor in actors:
+            movies_list = result.get(actor, [])
+            movies_list.append(movie["title"])
+            result[actor] = movies_list
+
+    return result
+
+
+def get_rating_movies(movies: list[dict[str, Any]]) -> dict[str, str]:
+    """Функция строит словарь {title: rating} для фильмов с рейтингом выше среднего."""
+    average_rate = average_rating(movies)
+    return {m["title"]: m["rating"] for m in movies if m["rating"] > average_rate}
+
+
+print(count_by_genre(movies))
+print("--------")
+print(actor_filmography(movies))
+print("--------")
+print(get_rating_movies(movies))
