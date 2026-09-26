@@ -1,5 +1,5 @@
 import math
-from typing import Any, Optional
+from typing import Any
 
 
 movies = [
@@ -111,8 +111,32 @@ def decade_label(year: int) -> str:
         case _:
             return ""
 
-for rate in [2.0, 5.3, 8.7, 9.9]:
-    print(rating_tier(rate))
 
-for year in [2009, 2016, 2023]:
-    print(decade_label(year))
+def print_not_comedy_films(movies: list[dict[str, Any]]) -> None:
+    """Функция выводит в консоль названия всех фильмов, не относящихся к жанру 'comedy'."""
+    for movie in movies:
+        if "comedy" in movie.get("genres", []):
+            continue
+        else:
+            print(movie.get("title"))
+
+
+def print_first_exelent_movie(movies: list[dict[str, Any]]) -> None:
+    """Функция выводит в консоль первого фильма с рейтингом 9.0 или сообщение "Шедевров не найдено"."""
+    i = 0
+    while i < len(movies):
+        if movies[i].get("rating", 0) > 9:
+            print(movies[i].get("title", None))
+            break
+        i += 1
+    else:
+        print("Шедевров не найдено")
+
+
+def count_long_movies(movies: list[dict[str, Any]], treshold: int = 120) -> int:
+    """Функция считает количество фильмов с продолжительностью больше, чем `treshold`."""
+    long_movies_cnt = 0
+    for movie in movies:
+        if movie.get("duration_min", 0) > treshold:
+            long_movies_cnt += 1
+    return long_movies_cnt
