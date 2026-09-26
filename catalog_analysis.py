@@ -168,8 +168,19 @@ def format_report_line(movie) -> str:
     return f'"{title}" ({year}) - {rate}/10, {time}, жанры: {genres}'
 
 
-for m in movies:
-    print(normalize_title(m['title']))
-    print(make_slug(normalize_title(m['title'])))
-    print(format_report_line(m))
-    print("------------")
+def titles_sorted_by_rating(movies: list[dict[str, Any]]) -> list[str]:
+    """Функция возвращает список названий фильмов, отсортированных по убыванию рейтинга."""
+    movies_copy = [{"title": m["title"], "rating": m["rating"]} for m in movies]
+    movies_copy.sort(key=lambda m: m["rating"], reverse=True)
+    result = [movie.get("title", "") for movie in movies_copy]
+
+    return result
+
+
+def top_n_by_rating(movies, n=3) -> list[tuple[str, float]]:
+    """Функция возвращает список кортежей (title, rating) - топ по рейтингу."""
+    movies_copy = [{"title": m["title"], "rating": m["rating"]} for m in movies]
+    movies_copy.sort(key=lambda m: m["rating"], reverse=True)
+    result = [(movie.get("title", ""), movie.get("rating", 0.0)) for movie in movies_copy]
+
+    return result[0:n+1]
